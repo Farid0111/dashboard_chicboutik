@@ -29,9 +29,15 @@ const statusOptions = [
 ]
 
 export default function Orders() {
-  const { orders } = useStore()
+  const { orders, products } = useStore()
   const [statusFilter, setStatusFilter] = useState('all')
   const [search, setSearch] = useState('')
+
+  const getProductImage = (item: { productId?: string; image?: string }) => {
+    if (item.image) return item.image
+    const product = products.find((p) => p.id === item.productId)
+    return product?.image || '/images/product-placeholder.svg'
+  }
 
   const filtered = orders
     .filter((o) => statusFilter === 'all' || o.status === statusFilter)
@@ -101,7 +107,7 @@ export default function Orders() {
                           {order.items.slice(0, 3).map((item, i) => (
                             <img
                               key={i}
-                              src={item.image}
+                              src={getProductImage(item)}
                               alt={item.name}
                               title={item.name}
                               className="h-8 w-8 rounded-full border-2 border-white object-cover"

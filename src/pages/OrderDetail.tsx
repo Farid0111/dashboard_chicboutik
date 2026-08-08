@@ -34,13 +34,19 @@ const statusOptions = [
 
 export default function OrderDetail() {
   const { orderId } = useParams<{ orderId: string }>()
-  const { orders, updateOrderStatus } = useStore()
+  const { orders, updateOrderStatus, products } = useStore()
   const [statusError, setStatusError] = useState<string | null>(null)
 
   const order = orders.find((o) => o.id === orderId)
   if (!order) return <Navigate to="/orders" replace />
 
   const currentStep = statusFlow.indexOf(order.status)
+
+  const getProductImage = (item: { productId?: string; image?: string }) => {
+    if (item.image) return item.image
+    const product = products.find((p) => p.id === item.productId)
+    return product?.image || '/images/product-placeholder.svg'
+  }
 
   return (
     <>
@@ -116,7 +122,7 @@ export default function OrderDetail() {
                 {order.items.map((item, i) => (
                   <div key={i} className="flex items-center gap-4 px-6 py-4">
                     <img
-                      src={item.image}
+                      src={getProductImage(item)}
                       alt={item.name}
                       className="h-16 w-16 rounded-lg object-cover"
                     />

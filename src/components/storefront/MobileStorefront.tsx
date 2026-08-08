@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Check, Star, MessageCircle } from 'lucide-react'
 import type { Product, SiteContent } from '../../types'
 import { supabase } from '../../lib/supabase'
-import type { Order } from '../../types'
 
 const FORM_FIELDS = [
   { label: 'Nom Complet', placeholder: 'Entrez votre nom complet', key: 'name' },

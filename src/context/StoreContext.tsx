@@ -18,7 +18,7 @@ import type {
   AccountingSummary,
   AccountingPeriod,
 } from '../types'
-import { initialOrders, initialProducts, initialSiteContent, initialExpenses } from '../data/mockData'
+import { initialOrders, initialSiteContent, initialExpenses } from '../data/mockData'
 import { computeAccountingSummary } from '../utils/accounting'
 import { normalizeSiteContent } from '../utils/siteContent'
 
@@ -147,10 +147,49 @@ interface StoreContextValue {
 const StoreContext = createContext<StoreContextValue | null>(null)
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [orders, setOrders] = useState<Order[]>(initialOrders)
-  const [products, setProducts] = useState<Product[]>(initialProducts)
-  const [siteContent, setSiteContent] = useState<SiteContent>(initialSiteContent)
-  const [expenses, setExpenses] = useState<Expense[]>(initialExpenses)
+  const [orders, setOrders] = useState<Order[]>([])
+  const [products, setProducts] = useState<Product[]>([])
+  const [siteContent, setSiteContent] = useState<SiteContent>({
+    urgencyBanner: '',
+    urgencyBannerActive: false,
+    stockWarning: '',
+    stockCount: 0,
+    productTitle: '',
+    productIcon: '',
+    productDescription: '',
+    priceLabel: '',
+    orderFormTitle: '',
+    orderFormSubtitle: '',
+    orderButtonText: '',
+    whatsappNumber: '',
+    whatsappActive: false,
+    whyTitle: '',
+    whyFeatures: [],
+    whyCta: '',
+    whyImage: '',
+    heroTitle: '',
+    heroText: '',
+    heroImage: '',
+    heroCta: '',
+    deliveryTitle: '',
+    deliveryText: '',
+    deliveryImage: '',
+    deliveryCta: '',
+    faqTitle: '',
+    faq: [],
+    showcaseImage: '',
+    comparisons: [],
+    statsTitle: '',
+    stats: [],
+    testimonials: [],
+    urgencyTitle: '',
+    urgencyCta: '',
+    reviewsMapTitle: '',
+    primaryColor: '',
+    buttonColor: '',
+    facebookPixelId: '',
+  })
+  const [expenses, setExpenses] = useState<Expense[]>([])
   const [accountingPeriod, setAccountingPeriod] = useState<AccountingPeriod>('all')
   const [loading, setLoading] = useState(true)
   const [dbError, setDbError] = useState<string | null>(null)

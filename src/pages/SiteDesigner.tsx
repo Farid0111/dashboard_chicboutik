@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   Save,
   Eye,
@@ -382,17 +382,19 @@ export default function SiteDesigner() {
                          <Upload size={16} />
                        </label>
                      </div>
-                     {product.images.map((_, i) => (
-                       <Button
-                         key={`remove-${i}`}
-                         variant="ghost"
-                         size="sm"
-                         className="absolute -top-1 -right-1 w-4 h-4 p-0 text-red-600"
-                         onClick={() =>
-                           patchProduct({ images: product.images.filter((_, j) => j !== i) })
-                         }
-                       />
-                     ))}
+                      {product.images.map((_, i) => (
+                        <Button
+                          key={`remove-${i}`}
+                          variant="ghost"
+                          size="sm"
+                          className="absolute -top-1 -right-1 w-4 h-4 p-0 text-red-600"
+                          onClick={() =>
+                            patchProduct({ images: product.images.filter((_, j) => j !== i) })
+                          }
+                        >
+                          ×
+                        </Button>
+                      ))}
                    </div>
                    <p className="text-xs font-medium text-gray-500">Note / Rating</p>
                    <Input

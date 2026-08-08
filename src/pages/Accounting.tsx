@@ -10,8 +10,6 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   RefreshCw,
-  CalendarIcon,
-  ChevronDown,
 } from 'lucide-react'
 import Header from '../components/layout/Header'
 import Card, { CardHeader, CardBody } from '../components/ui/Card'
@@ -25,8 +23,8 @@ import {
   getPeriodLabel,
   getPeriodRange,
   PERIOD_PRESETS,
-  type AccountingPeriodPreset,
 } from '../utils/accounting'
+import type { AccountingPeriodPreset } from '../types'
 import type { Expense, ExpenseCategory } from '../types'
 
 const categoryOptions = (Object.entries(EXPENSE_CATEGORY_LABELS) as [ExpenseCategory, string][]).map(
@@ -51,7 +49,6 @@ function formatDate(dateStr: string) {
 
 export default function Accounting() {
   const {
-    orders,
     expenses,
     accounting,
     accountingPeriod,
@@ -67,8 +64,8 @@ export default function Accounting() {
   const [editing, setEditing] = useState<Expense | null>(null)
   const [form, setForm] = useState(emptyExpense)
   const [deleteId, setDeleteId] = useState<string | null>(null)
-  const [statusError, setStatusError] = useState<string | null>(null)
   const [showCustom, setShowCustom] = useState(false)
+  const [statusError, setStatusError] = useState('')
 
   const today = new Date().toISOString().slice(0, 10)
 
@@ -503,6 +500,9 @@ export default function Accounting() {
         size="md"
       >
         <div className="space-y-4">
+          {statusError && (
+            <p className="text-sm text-red-600">{statusError}</p>
+          )}
           <Input
             label="Libellé"
             value={form.label}
