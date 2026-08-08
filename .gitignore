@@ -1,0 +1,8 @@
+node_modules
+dist
+.env
+reference-frames/
+tmp-frames/
+*.mov
+*.mp4
+public/reference/
