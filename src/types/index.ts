@@ -122,6 +122,7 @@ export interface SiteContent {
   testimonials: Testimonial[]
   reviewsMapTitle: string
   urgencyTitle: string
+  urgencyCta: string
   primaryColor: string
   buttonColor: string
   facebookPixelId: string
