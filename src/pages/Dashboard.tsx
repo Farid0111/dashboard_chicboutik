@@ -154,28 +154,31 @@ export default function Dashboard() {
                       </td>
                     </tr>
                   ) : (
-                    recentOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-3">
-                        <Link to={`/orders/${order.id}`} className="font-medium text-brand-600 hover:underline">
-                          {order.id}
-                        </Link>
-                      </td>
-                      <td className="px-6 py-3 text-sm text-gray-700">{order.customerName}</td>
-                      <td className="px-6 py-3 text-sm font-medium text-gray-900">
-                        {formatFcfa(order.total)}
-                      </td>
-                      <td className="px-6 py-3">
-                        <StatusBadge status={order.status} />
-                      </td>
-                      <td className="px-6 py-3 text-sm text-gray-500">
-                        <span className="flex items-center gap-1">
-                          <Clock size={14} />
-                          {formatDate(order.createdAt)}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                    <>
+                      {recentOrders.map((order) => (
+                        <tr key={order.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-3">
+                            <Link to={`/orders/${order.id}`} className="font-medium text-brand-600 hover:underline">
+                              {order.id}
+                            </Link>
+                          </td>
+                          <td className="px-6 py-3 text-sm text-gray-700">{order.customerName}</td>
+                          <td className="px-6 py-3 text-sm font-medium text-gray-900">
+                            {formatFcfa(order.total)}
+                          </td>
+                          <td className="px-6 py-3">
+                            <StatusBadge status={order.status} />
+                          </td>
+                          <td className="px-6 py-3 text-sm text-gray-500">
+                            <span className="flex items-center gap-1">
+                              <Clock size={14} />
+                              {formatDate(order.createdAt)}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  )}
                 </tbody>
               </table>
             </div>

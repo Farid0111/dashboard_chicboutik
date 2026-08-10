@@ -106,21 +106,6 @@ function toDb(object: Record<string, any>): Record<string, any> {
   return result
 }
 
-function mapOrderToDb(order: Order): Record<string, any> {
-  return {
-    id: order.id,
-    customer_name: order.customerName,
-    customer_phone: order.customerPhone,
-    address: order.address,
-    city: order.city,
-    items: order.items,
-    total: order.total || 0,
-    status: order.status || 'pending',
-    notes: order.notes ?? null,
-    created_at: order.createdAt,
-  }
-}
-
 interface StoreContextValue {
   orders: Order[]
   products: Product[]
