@@ -8,11 +8,11 @@ export function normalizeSiteContent(raw: Partial<SiteContent> | null | undefine
     ...stored,
     productIcon: stored.productIcon ?? initialSiteContent.productIcon,
     whyFeatures:
-      Array.isArray(stored.whyFeatures) && stored.whyFeatures.length > 0
+      Array.isArray(stored.whyFeatures)
         ? stored.whyFeatures
         : initialSiteContent.whyFeatures,
   comparisons:
-    Array.isArray(stored.comparisons) && stored.comparisons.length > 0
+    Array.isArray(stored.comparisons)
       ? stored.comparisons
       : initialSiteContent.comparisons,
   compareImage:
@@ -24,15 +24,15 @@ export function normalizeSiteContent(raw: Partial<SiteContent> | null | undefine
       ? stored.compareTitle
       : initialSiteContent.compareTitle,
   faq:
-    Array.isArray(stored.faq) && stored.faq.length > 0
+    Array.isArray(stored.faq)
       ? stored.faq
       : initialSiteContent.faq,
   stats:
-    Array.isArray(stored.stats) && stored.stats.length > 0
+    Array.isArray(stored.stats)
       ? stored.stats
       : initialSiteContent.stats,
     testimonials:
-      Array.isArray(stored.testimonials) && stored.testimonials.length > 0
+      Array.isArray(stored.testimonials)
         ? stored.testimonials
         : initialSiteContent.testimonials,
   statsImage:
