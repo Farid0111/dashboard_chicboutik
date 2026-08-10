@@ -298,8 +298,10 @@ export default function DesktopStorefront({ content, product, viewport }: Deskto
       </div>
 
       <div className="border-t border-gray-200 bg-white py-12">
-        <div className={`mx-auto grid max-w-6xl ${isTablet ? 'grid-cols-1' : 'lg:grid-cols-2'} items-start gap-8 px-4`}>
-          <img src={content.showcaseImage} alt="" className="w-full rounded-2xl object-cover shadow-sm" />
+          <div className={`mx-auto grid max-w-6xl ${isTablet ? 'grid-cols-1' : 'lg:grid-cols-2'} items-start gap-8 px-4`}>
+          {(content.compareImage || content.showcaseImage) && (
+            <img src={content.compareImage || content.showcaseImage} alt="" className="w-full rounded-2xl object-cover shadow-sm" />
+          )}
           <div className="space-y-4">
             {content.compareTitle && (
               <h2 className="text-2xl font-bold">{content.compareTitle}</h2>

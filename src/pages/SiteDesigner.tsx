@@ -594,6 +594,12 @@ export default function SiteDesigner() {
                      onChange={(e) => patch({ compareTitle: e.target.value })}
                    />
                    <ImageUploadField
+                     label="Image comparaison"
+                     value={draft.compareImage}
+                     onUpload={() => uploadImageField('compareImage', 'compare')}
+                     onClear={() => patch({ compareImage: '' })}
+                   />
+                   <ImageUploadField
                     label="Image produit (gauche)"
                     value={draft.showcaseImage}
                     onUpload={() => uploadImageField('showcaseImage', 'showcase')}

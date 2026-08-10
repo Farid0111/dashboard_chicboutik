@@ -1,0 +1,1 @@
+ALTER TABLE site_content ADD COLUMN IF NOT EXISTS compare_image TEXT DEFAULT '';

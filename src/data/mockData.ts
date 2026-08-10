@@ -265,7 +265,8 @@ export const initialSiteContent: SiteContent = {
       answer: 'Oui, grâce à son design sans lame, il est sûr pour tous les âges.',
     },
   ],
-  showcaseImage: IMG.showcase,
+  showcaseImage: '',
+  compareImage: '',
   compareTitle: 'Pourquoi nous choisir ?',
   comparisons: [
     { id: 'c1', title: 'Ventilation', positive: 'Rotation 360°, 5 vitesses', negative: 'Angle fixe, 1-2 vitesses' },

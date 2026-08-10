@@ -354,7 +354,9 @@ export default function MobileStorefront({ content, product }: MobileStorefrontP
         {content.compareTitle && (
           <h2 className="mb-4 text-center text-xl font-bold text-gray-900">{content.compareTitle}</h2>
         )}
-        <img src={content.showcaseImage} alt="" className="mb-6 w-full rounded-2xl object-cover" />
+        {(content.compareImage || content.showcaseImage) && (
+          <img src={content.compareImage || content.showcaseImage} alt="" className="mb-6 w-full rounded-2xl object-cover" />
+        )}
         <div className="space-y-3">
           {content.comparisons.map((c) => (
             <div key={c.id} className="rounded-2xl border border-gray-200 bg-white p-4">
