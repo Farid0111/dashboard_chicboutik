@@ -323,6 +323,9 @@ export default function DesktopStorefront({ content, product, viewport }: Deskto
 
       <div className="bg-[#f1f5f9] py-12">
         <div className="mx-auto max-w-6xl px-4">
+          {content.statsImage && (
+            <img src={content.statsImage} alt="" className="mb-6 w-full rounded-2xl object-cover shadow-sm" />
+          )}
           <h2 className="text-center text-2xl font-bold">{content.statsTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
             {content.stats.map((s) => (
@@ -334,6 +337,11 @@ export default function DesktopStorefront({ content, product, viewport }: Deskto
           </div>
           {content.testimonials.length > 1 && (
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {content.reviewsMapImage && (
+                <div className="sm:col-span-2">
+                  <img src={content.reviewsMapImage} alt="" className="w-full rounded-2xl object-cover shadow-sm" />
+                </div>
+              )}
               {content.testimonials.slice(1).map((t) => (
                 <div key={t.id} className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
                   <div className="flex items-start gap-3">

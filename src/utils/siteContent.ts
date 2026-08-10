@@ -24,12 +24,20 @@ export function normalizeSiteContent(raw: Partial<SiteContent> | null | undefine
       ? stored.faq
       : initialSiteContent.faq,
   stats:
-      Array.isArray(stored.stats) && stored.stats.length > 0
-        ? stored.stats
-        : initialSiteContent.stats,
+    Array.isArray(stored.stats) && stored.stats.length > 0
+      ? stored.stats
+      : initialSiteContent.stats,
     testimonials:
       Array.isArray(stored.testimonials) && stored.testimonials.length > 0
         ? stored.testimonials
         : initialSiteContent.testimonials,
+  statsImage:
+    typeof stored.statsImage === 'string' && stored.statsImage.length > 0
+      ? stored.statsImage
+      : initialSiteContent.statsImage,
+  reviewsMapImage:
+    typeof stored.reviewsMapImage === 'string' && stored.reviewsMapImage.length > 0
+      ? stored.reviewsMapImage
+      : initialSiteContent.reviewsMapImage,
   }
 }

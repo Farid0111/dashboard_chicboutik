@@ -378,6 +378,9 @@ export default function MobileStorefront({ content, product }: MobileStorefrontP
 
       {/* Statistiques */}
       <div className="border-t border-gray-100 bg-gray-50 px-4 py-8">
+        {content.statsImage && (
+          <img src={content.statsImage} alt="" className="mb-4 w-full rounded-2xl object-cover" />
+        )}
         <h2 className="text-center text-xl font-bold text-gray-900">{content.statsTitle}</h2>
         <div className="mt-5 space-y-3">
           {content.stats.map((s) => (
@@ -394,6 +397,9 @@ export default function MobileStorefront({ content, product }: MobileStorefrontP
         </div>
         {content.testimonials.length > 1 && (
           <div className="mt-4 space-y-3">
+            {content.reviewsMapImage && (
+              <img src={content.reviewsMapImage} alt="" className="mb-3 w-full rounded-2xl object-cover" />
+            )}
             {content.testimonials.slice(1).map((t) => (
               <div key={t.id} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
                 <div className="flex items-start gap-3">

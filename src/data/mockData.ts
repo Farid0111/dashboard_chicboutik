@@ -273,6 +273,7 @@ export const initialSiteContent: SiteContent = {
     { id: 'c3', title: 'Affichage', positive: 'LED numérique', negative: 'Aucun ou indicateur simple' },
   ],
   statsTitle: 'Rejoignez des Milliers de Clients Satisfaits',
+  statsImage: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&h=600&fit=crop',
   stats: [
     { id: 's1', value: '95%', label: 'Confort garanti' },
     { id: 's2', value: 'Jusqu\'à 6h', label: 'Autonomie de batterie' },
@@ -297,6 +298,7 @@ export const initialSiteContent: SiteContent = {
   urgencyTitle: 'N\'attendez Plus ! Restez au Frais Cet Été',
   urgencyCta: 'Commandez Maintenant et Profitez !',
   reviewsMapTitle: 'Avis clients dans le monde',
+  reviewsMapImage: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200&h=600&fit=crop',
   primaryColor: '#334155',
   buttonColor: '#334155',
   facebookPixelId: '',

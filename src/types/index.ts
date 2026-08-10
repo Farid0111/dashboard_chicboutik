@@ -117,11 +117,12 @@ export interface SiteContent {
   compareTitle: string
   comparisons: ComparisonItem[]
   statsTitle: string
+  statsImage: string
   stats: StatItem[]
   testimonials: Testimonial[]
-  urgencyTitle: string
-  urgencyCta: string
   reviewsMapTitle: string
+  reviewsMapImage: string
+  urgencyTitle: string
   primaryColor: string
   buttonColor: string
   facebookPixelId: string
