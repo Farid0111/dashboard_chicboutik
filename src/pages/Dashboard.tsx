@@ -154,7 +154,7 @@ export default function Dashboard() {
                       </td>
                     </tr>
                   ) : (
-                    {recentOrders.map((order) => (
+                    recentOrders.map((order) => (
                     <tr key={order.id} className="hover:bg-gray-50">
                       <td className="px-6 py-3">
                         <Link to={`/orders/${order.id}`} className="font-medium text-brand-600 hover:underline">
