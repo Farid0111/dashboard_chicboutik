@@ -185,7 +185,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     stats: [],
     testimonials: [],
     reviewsMapTitle: '',
-    reviewsMapImage: '',
     urgencyTitle: '',
     primaryColor: '',
     buttonColor: '',

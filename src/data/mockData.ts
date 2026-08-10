@@ -298,7 +298,6 @@ export const initialSiteContent: SiteContent = {
   urgencyTitle: 'N\'attendez Plus ! Restez au Frais Cet Été',
   urgencyCta: 'Commandez Maintenant et Profitez !',
   reviewsMapTitle: 'Avis clients dans le monde',
-  reviewsMapImage: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200&h=600&fit=crop',
   primaryColor: '#334155',
   buttonColor: '#334155',
   facebookPixelId: '',

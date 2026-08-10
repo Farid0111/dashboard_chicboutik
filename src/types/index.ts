@@ -121,7 +121,6 @@ export interface SiteContent {
   stats: StatItem[]
   testimonials: Testimonial[]
   reviewsMapTitle: string
-  reviewsMapImage: string
   urgencyTitle: string
   primaryColor: string
   buttonColor: string

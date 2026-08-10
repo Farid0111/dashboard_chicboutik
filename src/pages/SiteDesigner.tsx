@@ -651,12 +651,6 @@ export default function SiteDesigner() {
                     value={draft.reviewsMapTitle}
                     onChange={(e) => patch({ reviewsMapTitle: e.target.value })}
                   />
-                  <ImageUploadField
-                    label="Image section avis (monde)"
-                    value={draft.reviewsMapImage}
-                    onUpload={() => uploadImageField('reviewsMapImage', 'reviews')}
-                    onClear={() => patch({ reviewsMapImage: '' })}
-                  />
                   <p className="text-xs font-medium text-gray-500">Statistiques</p>
                   <ListEditor<StatItem>
                     items={draft.stats}

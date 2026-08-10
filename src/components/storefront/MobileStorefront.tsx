@@ -397,9 +397,6 @@ export default function MobileStorefront({ content, product }: MobileStorefrontP
         </div>
         {content.testimonials.length > 1 && (
           <div className="mt-4 space-y-3">
-            {content.reviewsMapImage && (
-              <img src={content.reviewsMapImage} alt="" className="mb-3 w-full rounded-2xl object-cover" />
-            )}
             {content.testimonials.slice(1).map((t) => (
               <div key={t.id} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
                 <div className="flex items-start gap-3">
