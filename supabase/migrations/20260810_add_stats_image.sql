@@ -1,0 +1,1 @@
+ALTER TABLE site_content ADD COLUMN IF NOT EXISTS stats_image TEXT DEFAULT '';
