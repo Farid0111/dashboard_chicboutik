@@ -266,6 +266,7 @@ export const initialSiteContent: SiteContent = {
     },
   ],
   showcaseImage: IMG.showcase,
+  compareTitle: 'Pourquoi nous choisir ?',
   comparisons: [
     { id: 'c1', title: 'Ventilation', positive: 'Rotation 360°, 5 vitesses', negative: 'Angle fixe, 1-2 vitesses' },
     { id: 'c2', title: 'Sécurité', positive: 'Design sans lame', negative: 'Hélices apparentes' },

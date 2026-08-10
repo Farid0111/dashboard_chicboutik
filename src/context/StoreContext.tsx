@@ -178,6 +178,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     faqTitle: '',
     faq: [],
     showcaseImage: '',
+    compareTitle: '',
     comparisons: [],
     statsTitle: '',
     stats: [],

@@ -15,6 +15,10 @@ export function normalizeSiteContent(raw: Partial<SiteContent> | null | undefine
     Array.isArray(stored.comparisons) && stored.comparisons.length > 0
       ? stored.comparisons
       : initialSiteContent.comparisons,
+  compareTitle:
+    typeof stored.compareTitle === 'string' && stored.compareTitle.length > 0
+      ? stored.compareTitle
+      : initialSiteContent.compareTitle,
   faq:
     Array.isArray(stored.faq) && stored.faq.length > 0
       ? stored.faq

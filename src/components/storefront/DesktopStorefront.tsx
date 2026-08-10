@@ -301,6 +301,9 @@ export default function DesktopStorefront({ content, product, viewport }: Deskto
         <div className={`mx-auto grid max-w-6xl ${isTablet ? 'grid-cols-1' : 'lg:grid-cols-2'} items-start gap-8 px-4`}>
           <img src={content.showcaseImage} alt="" className="w-full rounded-2xl object-cover shadow-sm" />
           <div className="space-y-4">
+            {content.compareTitle && (
+              <h2 className="text-2xl font-bold">{content.compareTitle}</h2>
+            )}
             {content.comparisons.map((c) => (
               <div key={c.id} className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
                 <p className="font-semibold">{c.title}</p>

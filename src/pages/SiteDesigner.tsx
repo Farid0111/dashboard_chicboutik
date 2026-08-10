@@ -586,9 +586,14 @@ export default function SiteDesigner() {
                  </>
                )}
 
-              {activeTab === 'compare' && (
-                <>
-                  <ImageUploadField
+               {activeTab === 'compare' && (
+                 <>
+                   <Input
+                     label="Titre de section"
+                     value={draft.compareTitle}
+                     onChange={(e) => patch({ compareTitle: e.target.value })}
+                   />
+                   <ImageUploadField
                     label="Image produit (gauche)"
                     value={draft.showcaseImage}
                     onUpload={() => uploadImageField('showcaseImage', 'showcase')}

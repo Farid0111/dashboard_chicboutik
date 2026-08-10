@@ -114,6 +114,7 @@ export interface SiteContent {
   faqTitle: string
   faq: FaqItem[]
   showcaseImage: string
+  compareTitle: string
   comparisons: ComparisonItem[]
   statsTitle: string
   stats: StatItem[]
