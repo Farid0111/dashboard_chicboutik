@@ -186,6 +186,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     testimonials: [],
     reviewsMapTitle: '',
     urgencyTitle: '',
+    urgencyCta: '',
     primaryColor: '',
     buttonColor: '',
     facebookPixelId: '',
