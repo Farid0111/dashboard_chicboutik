@@ -147,7 +147,14 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {recentOrders.map((order) => (
+                  {recentOrders.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-12 text-center text-sm text-gray-500">
+                        Aucune commande pour le moment.
+                      </td>
+                    </tr>
+                  ) : (
+                    {recentOrders.map((order) => (
                     <tr key={order.id} className="hover:bg-gray-50">
                       <td className="px-6 py-3">
                         <Link to={`/orders/${order.id}`} className="font-medium text-brand-600 hover:underline">

@@ -18,7 +18,7 @@ import type {
   AccountingSummary,
   AccountingPeriod,
 } from '../types'
-import { initialOrders, initialSiteContent, initialExpenses } from '../data/mockData'
+import { initialSiteContent, initialExpenses } from '../data/mockData'
 import { computeAccountingSummary } from '../utils/accounting'
 import { normalizeSiteContent } from '../utils/siteContent'
 
@@ -238,25 +238,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           return payload
         })
         await supabase.from('expenses').insert(expensePayloads)
-      }
-
-      const { data: existingOrders, error: ordersError } = await supabase
-        .from('orders')
-        .select('id')
-      if (!ordersError) {
-        const existingIds = new Set(existingOrders.map((o: any) => String(o.id)))
-        const ordersToInsert = initialOrders
-          .filter((o) => !existingIds.has(o.id))
-          .map((order) => {
-            const payload = mapOrderToDb(order)
-            Object.keys(payload).forEach((key) => {
-              if (payload[key] === undefined) delete payload[key]
-            })
-            return payload
-          })
-        if (ordersToInsert.length > 0) {
-          await supabase.from('orders').insert(ordersToInsert)
-        }
       }
     } catch (err) {
       console.error('Seed error:', err)
