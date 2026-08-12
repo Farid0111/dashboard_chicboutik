@@ -331,34 +331,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  useEffect(() => {
-    let idleTimeout: ReturnType<typeof setTimeout> | null = null
-    const IDLE_MS = 60000
-
-    const resetIdleTimer = () => {
-      if (idleTimeout) clearTimeout(idleTimeout)
-      idleTimeout = setTimeout(() => {
-        fetchData()
-      }, IDLE_MS)
-    }
-
-    const events = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart']
-    events.forEach((event) => {
-      window.addEventListener(event, resetIdleTimer, { passive: true })
-    })
-
-    idleTimeout = setTimeout(() => {
-      fetchData()
-    }, IDLE_MS)
-
-    return () => {
-      events.forEach((event) => {
-        window.removeEventListener(event, resetIdleTimer)
-      })
-      if (idleTimeout) clearTimeout(idleTimeout)
-    }
-  }, [fetchData])
-
   const refreshData = useCallback(() => {
     fetchData()
   }, [fetchData])
