@@ -116,6 +116,7 @@ interface StoreContextValue {
   accountingPeriod: AccountingPeriod
   setAccountingPeriod: (period: AccountingPeriod) => void
   updateOrderStatus: (orderId: string, status: OrderStatus) => void
+  updateOrderNotes: (orderId: string, notes: string | null) => void
   addProduct: (product: Omit<Product, 'id' | 'createdAt'>) => void
   updateProduct: (id: string, updates: Partial<Product>) => void
   deleteProduct: (id: string) => void
@@ -285,11 +286,78 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       )
       .subscribe()
 
+    const productsChannel = supabase
+      .channel('products-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'products' },
+        (payload: any) => {
+          if (payload.eventType === 'DELETE') {
+            setProducts((prev) => prev.filter((p) => p.id !== String(payload.old.id)))
+            return
+          }
+          const product = mapSupabaseProduct(payload.new as any)
+          setProducts((prev) => {
+            if (payload.eventType === 'INSERT') {
+              return [product, ...prev]
+            } else if (payload.eventType === 'UPDATE') {
+              return prev.map((p) => (p.id === product.id ? product : p))
+            }
+            return prev
+          })
+        }
+      )
+      .subscribe()
+
+    const siteContentChannel = supabase
+      .channel('site-content-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'site_content' },
+        (payload: any) => {
+          if (payload.new) {
+            const content = mapSupabaseSiteContent(payload.new as any)
+            setSiteContent(normalizeSiteContent(content))
+          }
+        }
+      )
+      .subscribe()
+
     return () => {
       supabase.removeChannel(expensesChannel)
       supabase.removeChannel(ordersChannel)
+      supabase.removeChannel(productsChannel)
+      supabase.removeChannel(siteContentChannel)
     }
   }, [])
+
+  useEffect(() => {
+    let idleTimeout: ReturnType<typeof setTimeout> | null = null
+    const IDLE_MS = 60000
+
+    const resetIdleTimer = () => {
+      if (idleTimeout) clearTimeout(idleTimeout)
+      idleTimeout = setTimeout(() => {
+        fetchData()
+      }, IDLE_MS)
+    }
+
+    const events = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart']
+    events.forEach((event) => {
+      window.addEventListener(event, resetIdleTimer, { passive: true })
+    })
+
+    idleTimeout = setTimeout(() => {
+      fetchData()
+    }, IDLE_MS)
+
+    return () => {
+      events.forEach((event) => {
+        window.removeEventListener(event, resetIdleTimer)
+      })
+      if (idleTimeout) clearTimeout(idleTimeout)
+    }
+  }, [fetchData])
 
   const refreshData = useCallback(() => {
     fetchData()
@@ -329,6 +397,22 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       console.error('Order status update failed: no rows affected. Check RLS policies.')
       setOrders(prevOrders)
       throw new Error('Failed to update order status — run this SQL in Supabase SQL Editor: DROP POLICY IF EXISTS orders_anon_update ON orders; CREATE POLICY orders_anon_update ON orders FOR UPDATE USING (true); DROP POLICY IF EXISTS orders_anon_delete ON orders; CREATE POLICY orders_anon_delete ON orders FOR DELETE USING (true);')
+    }
+  }, [orders])
+
+  const updateOrderNotes = useCallback(async (orderId: string, notes: string | null) => {
+    const prevOrders = orders
+    setOrders((prev) =>
+      prev.map((o) => (o.id === orderId ? { ...o, notes: notes ?? '' } : o))
+    )
+    const { error } = await supabase
+      .from('orders')
+      .update({ notes: notes ?? '' })
+      .eq('id', orderId)
+    if (error) {
+      console.error('Error updating order notes:', error.message, error.details)
+      setOrders(prevOrders)
+      throw error
     }
   }, [orders])
 
@@ -454,6 +538,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         accountingPeriod,
         setAccountingPeriod,
         updateOrderStatus,
+        updateOrderNotes,
         addProduct,
         updateProduct,
         deleteProduct,

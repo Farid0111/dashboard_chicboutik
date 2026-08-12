@@ -1,11 +1,11 @@
-import { useState } from 'react'
-import { useParams, Link, Navigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, MapPin, Mail, Phone, Package } from 'lucide-react'
 import Header from '../components/layout/Header'
 import Card, { CardHeader, CardBody } from '../components/ui/Card'
 import StatusBadge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
-import { Select } from '../components/ui/Input'
+import { Select, Textarea } from '../components/ui/Input'
 import { useStore } from '../context/StoreContext'
 import type { OrderStatus } from '../types'
 
@@ -34,11 +34,37 @@ const statusOptions = [
 
 export default function OrderDetail() {
   const { orderId } = useParams<{ orderId: string }>()
-  const { orders, updateOrderStatus, products } = useStore()
+  const { orders, updateOrderStatus, updateOrderNotes, products, loading } = useStore()
   const [statusError, setStatusError] = useState<string | null>(null)
+  const [notes, setNotes] = useState('')
+  const [notesSaved, setNotesSaved] = useState(false)
 
-  const order = orders.find((o) => o.id === orderId)
-  if (!order) return <Navigate to="/orders" replace />
+  const order = orderId ? orders.find((o) => String(o.id) === String(orderId)) : undefined
+
+  useEffect(() => {
+    if (order) {
+      setNotes(order.notes || '')
+    }
+  }, [order])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <p className="text-sm text-gray-500">Chargement...</p>
+      </div>
+    )
+  }
+
+  if (!orderId || !order) {
+    return (
+      <div className="flex flex-col items-center justify-center h-96 gap-4">
+        <p className="text-sm text-gray-500">Commande introuvable.</p>
+        <Link to="/orders" className="text-sm font-medium text-brand-600 hover:text-brand-700">
+          Retour aux commandes
+        </Link>
+      </div>
+    )
+  }
 
   const currentStep = statusFlow.indexOf(order.status)
 
@@ -46,6 +72,17 @@ export default function OrderDetail() {
     if (item.image) return item.image
     const product = products.find((p) => p.id === item.productId)
     return product?.image || '/images/product-placeholder.svg'
+  }
+
+  const saveNotes = async () => {
+    setNotesSaved(false)
+    try {
+      await updateOrderNotes(order.id, notes || null)
+      setNotesSaved(true)
+      setTimeout(() => setNotesSaved(false), 2000)
+    } catch {
+      setNotesSaved(false)
+    }
   }
 
   return (
@@ -215,11 +252,20 @@ export default function OrderDetail() {
                     {order.city}
                   </span>
                 </div>
-                {order.notes && (
-                  <div className="mt-3 rounded-lg bg-amber-50 p-3 text-sm text-amber-800">
-                    <strong>Note :</strong> {order.notes}
-                  </div>
-                )}
+                <div className="mt-3 space-y-2">
+                  <Textarea
+                    label="Note après appel"
+                    placeholder="Ex: Client rappelé, adresse confirmée, client injoignable..."
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    onBlur={saveNotes}
+                    rows={3}
+                    className="text-sm"
+                  />
+                  {notesSaved && (
+                    <p className="text-xs text-green-600">Note enregistrée</p>
+                  )}
+                </div>
               </CardBody>
             </Card>
           </div>
