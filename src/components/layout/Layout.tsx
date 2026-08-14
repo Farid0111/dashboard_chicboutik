@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import { useStore } from '../../context/StoreContext'
+import { Menu } from 'lucide-react'
 
 export default function Layout() {
   const { loading } = useStore()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   if (loading) {
     return (
@@ -17,9 +20,25 @@ export default function Layout() {
   }
 
   return (
-    <div className="min-h-screen">
-      <Sidebar />
-      <main className="ml-64">
+    <div className="min-h-screen overflow-x-hidden">
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-20 bg-black/50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <button
+        type="button"
+        onClick={() => setSidebarOpen(true)}
+        className="fixed left-2 top-2 z-40 rounded-lg bg-white p-2 shadow-md lg:hidden"
+      >
+        <Menu size={20} className="text-gray-700" />
+      </button>
+
+      <main className="ml-0 lg:ml-64">
         <Outlet />
       </main>
     </div>
