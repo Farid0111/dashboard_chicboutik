@@ -1,3 +1,4 @@
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ShoppingCart,
@@ -7,13 +8,20 @@ import {
   ArrowRight,
   Clock,
   Calculator,
+  Calendar,
 } from 'lucide-react'
 import Header from '../components/layout/Header'
 import Card, { CardHeader, CardBody } from '../components/ui/Card'
 import StatusBadge from '../components/ui/Badge'
+import Button from '../components/ui/Button'
 import { useStore } from '../context/StoreContext'
 
 import { formatFcfa } from '../utils/format'
+import {
+  PERIOD_PRESETS,
+  getPeriodRange,
+} from '../utils/accounting'
+import type { AccountingPeriod, AccountingPeriodPreset } from '../types'
 
 function formatDate(dateStr: string) {
   return new Intl.DateTimeFormat('fr-FR', {
@@ -26,9 +34,31 @@ function formatDate(dateStr: string) {
 }
 
 export default function Dashboard() {
-  const { stats, orders, products, accounting } = useStore()
+  const { orders, products, accounting, accountingPeriod, setAccountingPeriod } = useStore()
+  const [period, setPeriod] = useState<AccountingPeriod>(accountingPeriod)
 
-  const recentOrders = [...orders]
+  const range = getPeriodRange(period)
+
+  const filteredOrders = useMemo(() => {
+    if (!range) return orders
+    return orders.filter((o) => {
+      const d = new Date(o.createdAt)
+      return d >= range.start && d <= range.end
+    })
+  }, [orders, range])
+
+  const filteredStats = useMemo(() => {
+    const active = filteredOrders.filter((o) => o.status !== 'cancelled')
+    return {
+      totalOrders: active.length,
+      pendingOrders: active.filter((o) => o.status === 'pending').length,
+      totalRevenue: active.reduce((sum, o) => sum + o.total, 0),
+      totalProducts: products.filter((p) => p.active).length,
+      lowStockProducts: products.filter((p) => p.stock <= 10 && p.active).length,
+    }
+  }, [filteredOrders, products])
+
+  const recentFilteredOrders = [...filteredOrders]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5)
 
@@ -37,39 +67,58 @@ export default function Dashboard() {
   const statCards = [
     {
       label: 'Commandes totales',
-      value: stats.totalOrders.toString(),
+      value: filteredStats.totalOrders.toString(),
       icon: ShoppingCart,
       color: 'bg-blue-500',
-      change: `${stats.pendingOrders} en attente`,
+      change: `${filteredStats.pendingOrders} en attente`,
     },
     {
-      label: 'Chiffre d\'affaires',
-      value: formatFcfa(stats.totalRevenue),
+      label: "Chiffre d'affaires",
+      value: formatFcfa(filteredStats.totalRevenue),
       icon: TrendingUp,
       color: 'bg-green-500',
       change: 'Hors annulations',
     },
     {
       label: 'Produits actifs',
-      value: stats.totalProducts.toString(),
+      value: filteredStats.totalProducts.toString(),
       icon: Package,
       color: 'bg-purple-500',
       change: `${products.length} au total`,
     },
     {
       label: 'Stock faible',
-      value: stats.lowStockProducts.toString(),
+      value: filteredStats.lowStockProducts.toString(),
       icon: AlertTriangle,
       color: 'bg-amber-500',
       change: '≤ 10 unités',
     },
   ]
 
+  const isActive = (preset: AccountingPeriodPreset) => period === preset
+
   return (
     <>
       <Header title="Tableau de bord" subtitle="Vue d'ensemble de votre boutique" />
 
       <div className="space-y-4 p-4 sm:space-y-6 sm:p-6 lg:space-y-6 lg:p-8">
+        <div className="flex flex-wrap items-center gap-2">
+          <Calendar size={16} className="text-gray-400" />
+          {PERIOD_PRESETS.map((preset) => (
+            <Button
+              key={preset.value}
+              size="sm"
+              variant={isActive(preset.value) ? 'primary' : 'secondary'}
+              onClick={() => {
+                setPeriod(preset.value)
+                setAccountingPeriod(preset.value)
+              }}
+            >
+              {preset.label}
+            </Button>
+          ))}
+        </div>
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {statCards.map((stat) => (
             <Card key={stat.label}>
@@ -149,15 +198,15 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {recentOrders.length === 0 ? (
+                  {recentFilteredOrders.length === 0 ? (
                     <tr>
                       <td colSpan={5} className="px-3 py-8 sm:px-6 sm:py-12 text-center text-xs sm:text-sm text-gray-500">
-                        Aucune commande pour le moment.
+                        Aucune commande pour cette période.
                       </td>
                     </tr>
                   ) : (
                     <>
-                      {recentOrders.map((order) => (
+                      {recentFilteredOrders.map((order) => (
                         <tr key={order.id} className="hover:bg-gray-50">
                           <td className="px-3 py-2.5 sm:px-6 sm:py-3">
                             <Link to={`/orders/${order.id}`} className="text-xs sm:text-sm font-medium text-brand-600 hover:underline">
