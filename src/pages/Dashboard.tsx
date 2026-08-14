@@ -14,6 +14,7 @@ import Header from '../components/layout/Header'
 import Card, { CardHeader, CardBody } from '../components/ui/Card'
 import StatusBadge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
+import { Input } from '../components/ui/Input'
 import { useStore } from '../context/StoreContext'
 
 import { formatFcfa } from '../utils/format'
@@ -21,7 +22,7 @@ import {
   PERIOD_PRESETS,
   getPeriodRange,
 } from '../utils/accounting'
-import type { AccountingPeriod, AccountingPeriodPreset } from '../types'
+import type { AccountingPeriod, AccountingPeriodPreset, AccountingPeriodCustom } from '../types'
 
 function formatDate(dateStr: string) {
   return new Intl.DateTimeFormat('fr-FR', {
@@ -36,6 +37,19 @@ function formatDate(dateStr: string) {
 export default function Dashboard() {
   const { orders, products, accounting, accountingPeriod, setAccountingPeriod } = useStore()
   const [period, setPeriod] = useState<AccountingPeriod>(accountingPeriod)
+  const [showCustom, setShowCustom] = useState(false)
+
+  const today = new Date().toISOString().slice(0, 10)
+
+  function applyCustom() {
+    const start = (document.getElementById('dash-period-start') as HTMLInputElement)?.value
+    const end = (document.getElementById('dash-period-end') as HTMLInputElement)?.value
+    if (start && end && new Date(end) >= new Date(start)) {
+      const custom: AccountingPeriodCustom = { type: 'custom', start, end }
+      setPeriod(custom)
+      setAccountingPeriod(custom)
+    }
+  }
 
   const range = getPeriodRange(period)
 
@@ -95,7 +109,15 @@ export default function Dashboard() {
     },
   ]
 
-  const isActive = (preset: AccountingPeriodPreset) => period === preset
+  const isActive = (preset: AccountingPeriodPreset | AccountingPeriodCustom) => {
+    if (typeof preset === 'object' && preset.type === 'custom') {
+      return typeof period === 'object' && period.type === 'custom'
+    }
+    return period === preset
+  }
+
+  const isCustomActive =
+    typeof period === 'object' && period.type === 'custom'
 
   return (
     <>
@@ -117,7 +139,45 @@ export default function Dashboard() {
               {preset.label}
             </Button>
           ))}
+          <Button
+            size="sm"
+            variant={isCustomActive ? 'primary' : 'secondary'}
+            onClick={() => setShowCustom((v) => !v)}
+          >
+            Personnalisé
+          </Button>
         </div>
+
+        {showCustom && (
+          <div className="flex flex-wrap items-center gap-2">
+            <Input
+              id="dash-period-start"
+              type="date"
+              max={today}
+              className="w-36"
+              defaultValue={
+                typeof period === 'object' && period.type === 'custom'
+                  ? period.start
+                  : ''
+              }
+            />
+            <span className="text-sm text-gray-500">à</span>
+            <Input
+              id="dash-period-end"
+              type="date"
+              max={today}
+              className="w-36"
+              defaultValue={
+                typeof period === 'object' && period.type === 'custom'
+                  ? period.end
+                  : ''
+              }
+            />
+            <Button size="sm" onClick={applyCustom}>
+              Appliquer
+            </Button>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {statCards.map((stat) => (
