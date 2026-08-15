@@ -255,12 +255,13 @@ export default function Dashboard() {
                     <th className="px-3 py-2 sm:px-6 sm:py-3">Montant</th>
                     <th className="px-3 py-2 sm:px-6 sm:py-3">Statut</th>
                     <th className="px-3 py-2 sm:px-6 sm:py-3">Date</th>
+                    <th className="px-3 py-2 sm:px-6 sm:py-3">Note</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {recentFilteredOrders.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-3 py-8 sm:px-6 sm:py-12 text-center text-xs sm:text-sm text-gray-500">
+                      <td colSpan={6} className="px-3 py-8 sm:px-6 sm:py-12 text-center text-xs sm:text-sm text-gray-500">
                         Aucune commande pour cette période.
                       </td>
                     </tr>
@@ -289,6 +290,18 @@ export default function Dashboard() {
                               <span className="hidden sm:inline">{formatDate(order.createdAt)}</span>
                               <span className="sm:hidden">{new Date(order.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}</span>
                             </span>
+                          </td>
+                          <td className="px-3 py-2.5 sm:px-6 sm:py-3">
+                            {order.notes ? (
+                              <span
+                                className="inline-block max-w-[180px] truncate rounded-md bg-amber-50 px-2 py-1 text-[11px] sm:text-xs font-medium text-amber-800"
+                                title={order.notes}
+                              >
+                                {order.notes}
+                              </span>
+                            ) : (
+                              <span className="text-[11px] sm:text-xs text-gray-400">—</span>
+                            )}
                           </td>
                         </tr>
                       ))}

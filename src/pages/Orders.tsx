@@ -77,20 +77,21 @@ export default function Orders() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-100 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                 <tr className="border-b border-gray-100 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                   <th className="px-6 py-3">N° Commande</th>
                   <th className="px-6 py-3">Client</th>
                   <th className="px-6 py-3">Articles</th>
                   <th className="px-6 py-3">Total</th>
                   <th className="px-6 py-3">Statut</th>
                   <th className="px-6 py-3">Date</th>
+                  <th className="px-6 py-3">Note</th>
                   <th className="px-6 py-3">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center text-sm text-gray-500">
+                    <td colSpan={8} className="px-6 py-12 text-center text-sm text-gray-500">
                       Aucune commande trouvée.
                     </td>
                   </tr>
@@ -128,6 +129,18 @@ export default function Orders() {
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">
                         {formatDate(order.createdAt)}
+                      </td>
+                      <td className="px-6 py-4">
+                        {order.notes ? (
+                          <span
+                            className="inline-block max-w-[200px] truncate rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-800"
+                            title={order.notes}
+                          >
+                            {order.notes}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-gray-400">—</span>
+                        )}
                       </td>
                       <td className="px-6 py-4">
                         <Link
